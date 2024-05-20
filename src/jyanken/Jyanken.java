@@ -1,62 +1,48 @@
 package jyanken;
 
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Jyanken {
-	private Scanner scanner;
-	private String myChoise;
-	private String partnerChoise;
-	
+public class Jyanken {	
 //	ゲームを開始するメソッド
 	public void startGame() {
-		System.out.println("自分のじゃんけんの手を入力しましょう");
-		System.out.println("グーはrockのrを入力しましょう");
-		System.out.println("チョキはscissorsのsを入力しましょう");
-		System.out.println("パーはpaperのpを入力しましょう");
-		myChoise = getMyChoice();
-		partnerChoise = getPartnerChoise();
+		HashMap<String, String> jyanken = new HashMap<>();
+		jyanken.put("r", "グー");
+		jyanken.put("s", "チョキ");
+		jyanken.put("p", "パー");
+		
+		String myChoise = jyanken.get(getMyChoice());
+		String partnerChoise = jyanken.get(getPartnerChoise());
 		System.out.println("自分の手は" + myChoise + ",対戦相手の手は" + partnerChoise);
 		judgeGame(myChoise, partnerChoise);
 	}
 	
 //	自分の手を決めるメソッド
 	private String getMyChoice() {
-		scanner = new Scanner(System.in);
-		String myChoise = scanner.next();
-		do {
-			if (myChoise.equals("r")) {
-				myChoise = "グー";
-			} else if (myChoise.equals("s")) {
-				myChoise = "チョキ";
-			} else if (myChoise.equals("p")) {
-				myChoise = "パー";
+		Scanner scanner = new Scanner(System.in);
+		while (true) {
+			System.out.println("自分のじゃんけんの手を入力しましょう");
+			System.out.println("グーはrockのrを入力しましょう");
+			System.out.println("チョキはscissorsのsを入力しましょう");
+			System.out.println("パーはpaperのpを入力しましょう");
+			String myChoise = scanner.next();
+			if (!(myChoise.equals("r") || myChoise.equals("s") || myChoise.equals("p"))) {
+				System.out.println("グーのr、チョキのs、パーのpのどれかを入力してください");
+				continue;
 			} else {
-				System.out.println("入力された値が不正です");
-				System.out.println("もう一度入力してみてください");
-				myChoise = "不正";
+				scanner.close();
+				return myChoise;
 			}
-		} while (myChoise.equals("不正"));
-		return myChoise;
+		}
 	}
 	
 //	相手の手を決めるメソッド
 	private String getPartnerChoise() {
+		String[] partnerChoise = {"r", "s", "p"};
 		Random random = new Random();
-		int num = (random.nextInt(3) + 1);
-		switch (num) {
-		  case 1: {
-			partnerChoise = "グー";
-			break;
-		} case 2: {
-			partnerChoise = "チョキ";
-			break;
-		} case 3: {
-			partnerChoise = "パー";
-			break;
-			}
-		}
-		return partnerChoise;
+		int i = (random.nextInt(3) + 1);
+		return partnerChoise[i];
 	}
 	
 //	勝負を判定するメソッド
